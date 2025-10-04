@@ -1,6 +1,6 @@
 /*
  * Temperature PID Controller - ESP32
- * Basic project for testing compilation and flash
+ * Testing MAX6675 temperature sensor reading
  */
 
 #include <stdio.h>
@@ -12,6 +12,7 @@
 #include "esp_flash.h"
 #include "esp_system.h"
 #include "esp_log.h"
+#include "max6675.h"
 
 static const char *TAG = "TEMP_CONTROLLER";
 
@@ -53,13 +54,43 @@ void app_main(void)
     ESP_LOGI(TAG, "- Control: PID algorithm");
     ESP_LOGI(TAG, "- Interface: Web server");
 
-    // Main application loop
-    int counter = 0;
+    // Initialize MAX6675 temperature sensor
+    max6675_handle_t max6675_handle = {0};
+    esp_err_t ret = max6675_init(&max6675_handle);
+    if (ret != ESP_OK) {
+        ESP_LOGE(TAG, "Failed to initialize MAX6675: %s", esp_err_to_name(ret));
+        ESP_LOGE(TAG, "Please check SPI connections:");
+        ESP_LOGE(TAG, "- MISO: GPIO%d", MAX6675_MISO_PIN);
+        ESP_LOGE(TAG, "- MOSI: GPIO%d", MAX6675_MOSI_PIN);
+        ESP_LOGE(TAG, "- CLK:  GPIO%d", MAX6675_CLK_PIN);
+        ESP_LOGE(TAG, "- CS:   GPIO%d", MAX6675_CS_PIN);
+        return;
+    }
+
+    ESP_LOGI(TAG, "MAX6675 initialized successfully");
+    ESP_LOGI(TAG, "Starting temperature readings every 1 second...");
+
+    // Main application loop - read temperature every 1 second
+    int reading_count = 0;
+    float temperature = 0.0f;
+    
     while (1) {
-        ESP_LOGI(TAG, "Temperature Controller running... Counter: %d", counter++);
+        reading_count++;
+        
+        // Read temperature from MAX6675
+        ret = max6675_read_temperature(&max6675_handle, &temperature);
+        if (ret == ESP_OK) {
+            ESP_LOGI(TAG, "Reading #%d: Temperature = %.2f°C", reading_count, temperature);
+        } else if (ret == ESP_ERR_INVALID_RESPONSE) {
+            ESP_LOGW(TAG, "Reading #%d: Thermocouple not connected!", reading_count);
+        } else {
+            ESP_LOGE(TAG, "Reading #%d: Failed to read temperature: %s", 
+                     reading_count, esp_err_to_name(ret));
+        }
+        
         ESP_LOGI(TAG, "Free heap: %" PRIu32 " bytes", esp_get_free_heap_size());
         
-        // Wait 5 seconds
-        vTaskDelay(5000 / portTICK_PERIOD_MS);
+        // Wait 1 second before next reading
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
     }
 }
