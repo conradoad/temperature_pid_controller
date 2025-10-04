@@ -33,10 +33,12 @@ ESP32 GND ── Fonte 12V-
 - **Gate Voltage**: 3.3V (ESP32)
 - **MOSFET Vgs(th)**: 2-4V
 
-### Cálculos:
-- **Resistência Nicromo**: R = V²/P = 12²/120 = 1.2Ω
-- **Corrente Máxima**: I = V/R = 12/1.2 = 10A ✓
-- **Potência Máxima**: P = V×I = 12×10 = 120W
+### Cálculos para Tambor 6cm × 2,5cm:
+- **Resistência Nicromo**: R = V²/P = 12²/90 = 1.6Ω
+- **Corrente Máxima**: I = V/R = 12/1.6 = 7.5A ✓
+- **Potência Máxima**: P = V×I = 12×7.5 = 90W
+- **Fio necessário**: 1.5m de nicromo 0.3mm
+- **Enrolamento**: 8 voltas no tambor
 
 ### Proteções:
 - **Diodo Flyback**: Protege contra tensão reversa
