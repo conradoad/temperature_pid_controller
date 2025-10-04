@@ -13,6 +13,7 @@
 #include "esp_system.h"
 #include "esp_log.h"
 #include "max6675.h"
+#include "mosfet_pwm.h"
 
 static const char *TAG = "TEMP_CONTROLLER";
 
@@ -68,11 +69,24 @@ void app_main(void)
     }
 
     ESP_LOGI(TAG, "MAX6675 initialized successfully");
-    ESP_LOGI(TAG, "Starting temperature readings every 1 second...");
 
-    // Main application loop - read temperature every 1 second
+    // Initialize MOSFET PWM control
+    mosfet_pwm_handle_t mosfet_handle = {0};
+    ret = mosfet_pwm_init(&mosfet_handle);
+    if (ret != ESP_OK) {
+        ESP_LOGE(TAG, "Failed to initialize MOSFET PWM: %s", esp_err_to_name(ret));
+        ESP_LOGE(TAG, "Please check PWM pin connection: GPIO%d", MOSFET_PWM_PIN);
+        return;
+    }
+
+    ESP_LOGI(TAG, "MOSFET PWM initialized successfully");
+    ESP_LOGI(TAG, "Starting temperature readings and PWM testing...");
+
+    // Main application loop - read temperature and test PWM
     int reading_count = 0;
     float temperature = 0.0f;
+    uint32_t pwm_duty = 0;
+    bool pwm_increasing = true;
     
     while (1) {
         reading_count++;
@@ -88,9 +102,31 @@ void app_main(void)
                      reading_count, esp_err_to_name(ret));
         }
         
+        // Test PWM with ramping duty cycle (0% to 100% and back)
+        if (pwm_increasing) {
+            pwm_duty += 10;
+            if (pwm_duty >= 100) {
+                pwm_duty = 100;
+                pwm_increasing = false;
+            }
+        } else {
+            pwm_duty -= 10;
+            if (pwm_duty <= 0) {
+                pwm_duty = 0;
+                pwm_increasing = true;
+            }
+        }
+        
+        ret = mosfet_pwm_set_duty(&mosfet_handle, pwm_duty);
+        if (ret == ESP_OK) {
+            ESP_LOGI(TAG, "PWM duty cycle: %d%%", pwm_duty);
+        } else {
+            ESP_LOGE(TAG, "Failed to set PWM duty: %s", esp_err_to_name(ret));
+        }
+        
         ESP_LOGI(TAG, "Free heap: %" PRIu32 " bytes", esp_get_free_heap_size());
         
-        // Wait 1 second before next reading
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
+        // Wait 2 seconds before next reading (slower for PWM testing)
+        vTaskDelay(2000 / portTICK_PERIOD_MS);
     }
 }
