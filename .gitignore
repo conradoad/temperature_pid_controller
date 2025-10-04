@@ -1,0 +1,75 @@
+# ESP-IDF Build System
+build/
+sdkconfig
+sdkconfig.old
+sdkconfig.ci
+
+# ESP-IDF Configuration
+managed_components/
+
+# IDE and Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.backup
+
+# ESP-IDF specific
+dependencies.lock
+dependencies/
+
+# Flash and monitor logs
+flash_args
+monitor_args
+
+# Partition table backups
+partition_table_backup.csv
+
+# Custom components (if any)
+components/
+
+# Documentation build
+docs/_build/
+
+# Test results
+test_results/
+pytest_cache/
+
+# Coverage reports
+htmlcov/
+.coverage
+.coverage.*
+
+# ESP-IDF tools
+.espressif/
