@@ -1,8 +1,8 @@
 # Hardware Connections - MAX6675 Temperature Sensor
 
-## ESP32 to MAX6675 Connections
+## ESP32 DevKitC to MAX6675 Connections
 
-Para testar a leitura do sensor MAX6675, conecte os seguintes pinos:
+Para testar a leitura do sensor MAX6675 no ESP32 DevKitC, conecte os seguintes pinos:
 
 ### SPI Connections
 | ESP32 Pin | MAX6675 Pin | Description |
@@ -13,10 +13,32 @@ Para testar a leitura do sensor MAX6675, conecte os seguintes pinos:
 | GPIO5     | CS (Chip Select) | Chip Select |
 
 ### Power Connections
-| ESP32 Pin | MAX6675 Pin | Description |
-|-----------|-------------|-------------|
-| 3.3V      | VCC         | Power Supply |
-| GND       | GND         | Ground |
+| ESP32 DevKitC Pin | MAX6675 Pin | Description |
+|-------------------|-------------|-------------|
+| 3.3V              | VCC         | Power Supply |
+| GND               | GND         | Ground |
+
+**Note**: ESP32 DevKitC provides 3.3V and GND pins for powering external components.
+
+## ESP32 DevKitC Pin Compatibility
+
+The GPIO pins used in this project are compatible with ESP32 DevKitC:
+- **GPIO19 (MISO)**: Available on DevKitC
+- **GPIO23 (MOSI)**: Available on DevKitC  
+- **GPIO18 (CLK)**: Available on DevKitC
+- **GPIO5 (CS)**: Available on DevKitC
+- **GPIO4 (PWM)**: Available on DevKitC (GPIO2 reserved for onboard LED)
+
+**Important Note**: GPIO2 is commonly used for the onboard blue LED on ESP32 DevKitC boards, so we use GPIO4 for PWM control instead.
+
+## ESP32 DevKitC Onboard LED
+
+**GPIO2** is commonly used for the onboard blue LED on ESP32 DevKitC boards. This LED can be used for:
+- System status indication
+- Debug feedback
+- Application status
+
+**Note**: To avoid conflicts, we use **GPIO4** for MOSFET PWM control instead of GPIO2.
 
 ### Thermocouple Connections
 | MAX6675 Pin | Thermocouple Wire |

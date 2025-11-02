@@ -13,7 +13,7 @@
 ### Conexões:
 
 ```
-ESP32 GPIO2 ──[R2:100Ω]── Gate IRF3205
+ESP32 DevKitC GPIO4 ──[R2:100Ω]── Gate IRF3205
                     │
                    [R1:10kΩ]── GND
 
@@ -23,14 +23,16 @@ Fonte 12V+ ──[Fio Nicromo]── Drain IRF3205
                     │
                   Source IRF3205 ── Fonte 12V-
 
-ESP32 GND ── Fonte 12V-
+ESP32 DevKitC GND ── Fonte 12V-
 ```
+
+**Nota Importante**: O GPIO2 no ESP32 DevKitC é frequentemente usado para o LED azul onboard. Para evitar conflitos, usamos GPIO4 para controle PWM do MOSFET.
 
 ### Especificações:
 - **PWM Frequency**: 1 kHz
 - **Resolution**: 12-bit (0-4095)
 - **Max Power**: 120W (12V × 10A)
-- **Gate Voltage**: 3.3V (ESP32)
+- **Gate Voltage**: 3.3V (ESP32 DevKitC)
 - **MOSFET Vgs(th)**: 2-4V
 
 ### Cálculos para Tambor 6cm × 2,5cm:

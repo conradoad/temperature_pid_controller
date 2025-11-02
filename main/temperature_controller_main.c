@@ -1,5 +1,5 @@
 /*
- * Temperature PID Controller - ESP32
+ * Temperature PID Controller - ESP32 DevKitC
  * Testing MAX6675 temperature sensor reading
  */
 
@@ -21,7 +21,7 @@ static const char *TAG = "TEMP_CONTROLLER";
 
 void app_main(void)
 {
-    ESP_LOGI(TAG, "Temperature PID Controller Starting...");
+    ESP_LOGI(TAG, "Temperature PID Controller Starting on ESP32 DevKitC...");
     
     /* Print chip information */
     esp_chip_info_t chip_info;
@@ -52,10 +52,12 @@ void app_main(void)
     ESP_LOGI(TAG, "Minimum free heap size: %" PRIu32 " bytes", esp_get_minimum_free_heap_size());
 
     ESP_LOGI(TAG, "Project components:");
+    ESP_LOGI(TAG, "- Board: ESP32 DevKitC");
     ESP_LOGI(TAG, "- Temperature sensor: Termopar + MAX6675 (SPI)");
-    ESP_LOGI(TAG, "- Actuator: Nichrome wire + MOSFET IRF3205 (PWM)");
+    ESP_LOGI(TAG, "- Actuator: Nichrome wire + MOSFET IRF3205 (PWM on GPIO4)");
     ESP_LOGI(TAG, "- Control: PID algorithm");
     ESP_LOGI(TAG, "- Interface: Web server");
+    ESP_LOGI(TAG, "- Status LED: Onboard blue LED (GPIO2)");
 
     // Initialize MAX6675 temperature sensor
     max6675_handle_t max6675_handle = {0};
@@ -77,7 +79,7 @@ void app_main(void)
     ret = mosfet_pwm_init(&mosfet_handle);
     if (ret != ESP_OK) {
         ESP_LOGE(TAG, "Failed to initialize MOSFET PWM: %s", esp_err_to_name(ret));
-        ESP_LOGE(TAG, "Please check PWM pin connection: GPIO%d", MOSFET_PWM_PIN);
+        ESP_LOGE(TAG, "Please check PWM pin connection: GPIO%d (GPIO2 reserved for onboard LED)", MOSFET_PWM_PIN);
         return;
     }
 

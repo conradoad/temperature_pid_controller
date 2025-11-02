@@ -25,7 +25,7 @@ extern "C" {
 #define MOSFET_PWM_MAX_DUTY       4095    // Maximum duty cycle (100%)
 
 // GPIO Pin Configuration
-#define MOSFET_PWM_PIN            GPIO_NUM_2   // PWM output pin
+#define MOSFET_PWM_PIN            GPIO_NUM_4   // PWM output pin (GPIO2 used for onboard LED on DevKitC)
 
 // Power Control Functions
 typedef struct {

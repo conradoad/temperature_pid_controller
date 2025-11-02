@@ -1,6 +1,6 @@
-# Temperature PID Controller - ESP32
+# Temperature PID Controller - ESP32 DevKitC
 
-A temperature control system using ESP32 with PID algorithm for precise temperature control.
+A temperature control system using ESP32 DevKitC with PID algorithm for precise temperature control.
 
 ## Project Overview
 
@@ -13,12 +13,14 @@ This project implements a closed-loop temperature control system using:
 
 ## Hardware Components
 
-- ESP32 development board
+- ESP32 DevKitC development board
 - Thermocouple sensor
 - MAX6675 thermocouple-to-digital converter
 - MOSFET IRF3205
 - Nichrome heating wire
 - Supporting electronics (resistors, capacitors, etc.)
+
+**Note**: GPIO2 is reserved for the onboard LED on DevKitC. PWM control uses GPIO4 instead.
 
 ## Software Features
 
@@ -34,7 +36,7 @@ This project implements a closed-loop temperature control system using:
 ### Prerequisites
 
 - ESP-IDF v5.5-rc1 installed
-- ESP32 development board
+- ESP32 DevKitC development board
 - USB cable for programming
 
 ### Build Commands
